@@ -2,9 +2,17 @@
 #include "shader.h"
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
-Shader::Shader() {
+Shader::Shader() :ID(0) {
 
+}
+
+void Shader::LoadShader(const std::string& filepath) {
+    m_FilePath = filepath;
+    ShaderProgramSource source = ParseShader(filepath);
+    ID = CreateShader(source.VertexSource, source.FragmentSource, source.GeometrySouce);
 }
 
 Shader& Shader::Use()
@@ -13,40 +21,99 @@ Shader& Shader::Use()
     return *this;
 }
 
-void Shader::Compile(const GLchar* vertexSource, const GLchar* fragmentSource, const GLchar* geometrySource)
-{
-    GLuint sVertex, sFragment, gShader;
-    // Vertex Shader
-    sVertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(sVertex, 1, &vertexSource, NULL);
-    glCompileShader(sVertex);
-    checkCompileErrors(sVertex, "VERTEX");
-    // Fragment Shader
-    sFragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(sFragment, 1, &fragmentSource, NULL);
-    glCompileShader(sFragment);
-    checkCompileErrors(sFragment, "FRAGMENT");
-    // If geometry shader source code is given, also compile geometry shader
-    if (geometrySource != nullptr)
-    {
-        gShader = glCreateShader(GL_GEOMETRY_SHADER);
-        glShaderSource(gShader, 1, &geometrySource, NULL);
-        glCompileShader(gShader);
-        checkCompileErrors(gShader, "GEOMETRY");
+void Shader::UnUse() {
+    glUseProgram(0);
+}
+
+//从文件中将着色器代码读取出来
+ShaderProgramSource Shader::ParseShader(const std::string& filepath) {
+    std::ifstream stream(filepath);
+
+    enum class ShaderType {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2
+    };
+
+    std::string line;
+    std::stringstream ss[3];
+    ShaderType type = ShaderType::NONE;
+    while (getline(stream, line)) {
+        if (line.find("#shader") != std::string::npos) {
+            if (line.find("vertex") != std::string::npos) {
+                type = ShaderType::VERTEX;
+            }
+            else if (line.find("fragment") != std::string::npos) {
+                type = ShaderType::FRAGMENT;
+            }
+            else if (line.find("geometry") != std::string::npos) {
+                type = ShaderType::GEOMETRY;
+            }
+        }
+        else {
+            ss[(int)type] << line << '\n';
+        }
     }
-    // Shader Program
-    this->ID = glCreateProgram();
-    glAttachShader(this->ID, sVertex);
-    glAttachShader(this->ID, sFragment);
-    if (geometrySource != nullptr)
-        glAttachShader(this->ID, gShader);
-    glLinkProgram(this->ID);
-    checkCompileErrors(this->ID, "PROGRAM");
-    // Delete the shaders as they're linked into our program now and no longer necessery
-    glDeleteShader(sVertex);
-    glDeleteShader(sFragment);
-    if (geometrySource != nullptr)
-        glDeleteShader(gShader);
+
+    return { ss[0].str(),ss[1].str(),ss[2].str() };
+}
+
+unsigned int Shader::CompileShader(unsigned int type, const std::string& source) {
+    unsigned int id = glCreateShader(type);
+    const char* src = source.c_str();
+    glShaderSource(id, 1, &src, nullptr);
+    glCompileShader(id);
+
+    //Syntax error handling
+    int result;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+    if (result == GL_FALSE) {
+        //编译失败 获取错误信息
+        int length;
+        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+        char* message = (char*)alloca(length * sizeof(char));
+        glGetShaderInfoLog(id, length, &length, message);
+        std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertexShader"
+            : "fragmentShader ") << " shader!" << std::endl;
+        std::cout << message << std::endl;
+
+        glDeleteShader(id);
+        return 0;
+    }
+
+    return id;
+}
+
+//我们向OpenGL提供我们实际的着色器源代码，我的着色器文本。我们想让OpenGL编译那个程序，将这两个链接到一个
+//独立的着色器程序，然后给我们一些那个着色器返回的唯一标识符，我们就可以绑定着色器并使用
+unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) {
+    unsigned int program = glCreateProgram();
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+    unsigned int gs;
+    if (geometryShader.length() != 0) {
+        gs = CompileShader(GL_GEOMETRY_SHADER, geometryShader);
+    }
+    else {
+        gs = -1;
+    }
+
+    //将这两个着色器附加到我们的程序上
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    //链接程序
+    glLinkProgram(program);
+    glValidateProgram(program);
+
+    //删除一些无用的中间文件
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    if (gs != -1) {
+        glAttachShader(program, gs);
+        glLinkProgram(program);
+        glDeleteShader(gs);
+    }
+
+    return program;
 }
 
 void Shader::SetFloat(const GLchar* name, GLfloat value, GLboolean useShader)

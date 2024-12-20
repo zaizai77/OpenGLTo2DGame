@@ -137,6 +137,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\tools\ResourceManager.cpp" />
     <ClCompile Include="src\tools\Shader.cpp" />
+    <ClCompile Include="src\tools\SpriteRenderer.cpp" />
     <ClCompile Include="src\tools\texture.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
@@ -150,8 +151,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\tools\GetError.h" />
     <ClInclude Include="src\tools\ResourceManager.h" />
     <ClInclude Include="src\tools\Shader.h" />
+    <ClInclude Include="src\tools\SpriteRenderer.h" />
     <ClInclude Include="src\tools\texture.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
@@ -447,6 +450,7 @@
     <ClInclude Include="src\vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Shaders\sprite.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
