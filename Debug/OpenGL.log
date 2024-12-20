@@ -1,6 +1,6 @@
 ﻿  Game.cpp
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(31,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(32,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(33,80): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(34,79): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(34,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(35,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(36,80): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(37,79): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
   OpenGL.vcxproj -> D:\vs2022\OpenGLTo2DGame\OpenGL\Debug\OpenGL.exe

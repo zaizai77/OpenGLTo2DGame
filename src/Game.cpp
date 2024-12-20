@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 
 SpriteRenderer* renderer;
+GameObject* Player;
 
 Game::Game(GLuint width, GLuint height)
 	:state(GAME_ACTIVE),keys(),width(width),height(height) {
@@ -11,6 +12,7 @@ Game::Game(GLuint width, GLuint height)
 
 Game::~Game(){
 	delete renderer;
+	delete Player;
 }
 
 void Game::Init(){
@@ -26,6 +28,7 @@ void Game::Init(){
 	ResourceManager::LoadTexture("res/textures/awesomeface.png", GL_TRUE, "face");
 	ResourceManager::LoadTexture("res/textures/block.png", GL_FALSE, "block");
 	ResourceManager::LoadTexture("res/textures/block_solid.png", GL_FALSE, "block_solid");
+	ResourceManager::LoadTexture("res/textures/paddle.png", true, "paddle");
 
 	// 加载关卡
 	GameLevel one;     one.Load("res/levels/one.lvl", this->width, this->height * 0.5);
@@ -38,10 +41,27 @@ void Game::Init(){
 	this->levels.push_back(three);
 	this->levels.push_back(four);
 	this->level = 0;
+
+	glm::vec2 playerPos = glm::vec2(this->width / 2 - PLAYER_SIZE.x / 2, this->height - PLAYER_SIZE.y);
+	Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
 }
 
 void Game::ProcessInput(GLfloat dt){
-
+	if (this->state == GAME_ACTIVE)
+	{
+		GLfloat velocity = PLAYER_VELOCITY * dt;
+		// Move playerboard
+		if (this->keys[GLFW_KEY_A])
+		{
+			if (Player->Position.x >= 0)
+				Player->Position.x -= velocity;
+		}
+		if (this->keys[GLFW_KEY_D])
+		{
+			if (Player->Position.x <= this->width - Player->Size.x)
+				Player->Position.x += velocity;
+		}
+	}
 }
 
 void Game::Update(GLfloat dt){
@@ -54,4 +74,7 @@ void Game::Render(){
 			glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
 	}
 	this->levels[this->level].Draw(*renderer);
+
+	//Draw Player
+	Player->Draw(*renderer);
 }
