@@ -66,6 +66,9 @@
     <ClCompile Include="src\GameLevel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\BallObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image.h">
@@ -966,6 +969,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\GameLevel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BallObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
