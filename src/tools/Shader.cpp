@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+Shader::Shader() {
+
+}
+
 Shader& Shader::Use()
 {
     glUseProgram(this->ID);
