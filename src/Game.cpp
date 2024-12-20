@@ -22,7 +22,22 @@ void Game::Init(){
 
 	renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
-	ResourceManager::LoadTexture("res/textures/awesomeface.png", true, "face");
+	ResourceManager::LoadTexture("res/textures/background.jpg", GL_FALSE, "background");
+	ResourceManager::LoadTexture("res/textures/awesomeface.png", GL_TRUE, "face");
+	ResourceManager::LoadTexture("res/textures/block.png", GL_FALSE, "block");
+	ResourceManager::LoadTexture("res/textures/block_solid.png", GL_FALSE, "block_solid");
+
+	// 加载关卡
+	GameLevel one;     one.Load("res/levels/one.lvl", this->width, this->height * 0.5);
+	GameLevel two;     two.Load("res/levels/two.lvl", this->width, this->height * 0.5);
+	GameLevel three; three.Load("res/levels/three.lvl", this->width, this->height * 0.5);
+	GameLevel four;   four.Load("res/levels/four.lvl", this->width, this->height * 0.5);
+
+	this->levels.push_back(one);
+	this->levels.push_back(two);
+	this->levels.push_back(three);
+	this->levels.push_back(four);
+	this->level = 0;
 }
 
 void Game::ProcessInput(GLfloat dt){
@@ -34,6 +49,9 @@ void Game::Update(GLfloat dt){
 }
 
 void Game::Render(){
-	renderer->DrawSprite(ResourceManager::GetTexture("face"),
-		glm::vec2(200.0f, 200.0f), glm::vec2(300.0f, 400.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	if (this->state == GAME_ACTIVE) {
+		renderer->DrawSprite(ResourceManager::GetTexture("background"),
+			glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
+	}
+	this->levels[this->level].Draw(*renderer);
 }
