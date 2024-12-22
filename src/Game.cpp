@@ -2,10 +2,12 @@
 #include "SpriteRenderer.h"
 #include "ResourceManager.h"
 #include "BallObject.h"
+#include "ParticalGenerator.h"
 
 SpriteRenderer* renderer;
 GameObject* Player;
 BallObject* ball;
+ParticleGenerator* partical;
 
 Game::Game(GLuint width, GLuint height)
 	:state(GAME_ACTIVE),keys(),width(width),height(height) {
@@ -23,6 +25,8 @@ void Game::Init(){
 		static_cast<float>(this->height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	ResourceManager::LoadShader("src/Shaders/partical.shader", "partical");
+	ResourceManager::GetShader("partical").Use().SetMatrix4("projection", projection);
 
 	renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -31,6 +35,7 @@ void Game::Init(){
 	ResourceManager::LoadTexture("res/textures/block.png", GL_FALSE, "block");
 	ResourceManager::LoadTexture("res/textures/block_solid.png", GL_FALSE, "block_solid");
 	ResourceManager::LoadTexture("res/textures/paddle.png", true, "paddle");
+	ResourceManager::LoadTexture("res/textures/particle.png", GL_TRUE, "partical");
 
 	// 加载关卡
 	GameLevel one;     one.Load("res/levels/one.lvl", this->width, this->height * 0.5);
@@ -49,6 +54,12 @@ void Game::Init(){
 
 	glm::vec2 ballPos = playerPos + glm::vec2(PLAYER_SIZE.x / 2.0f - BALL_RADIUS, -BALL_RADIUS * 2.0f);
 	ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::GetTexture("face"));
+
+	partical = new ParticleGenerator(
+		ResourceManager::GetShader("partical"),
+		ResourceManager::GetTexture("partical"),
+		500
+	);
 }
 
 void Game::ProcessInput(GLfloat dt){
@@ -84,20 +95,26 @@ void Game::Update(GLfloat dt){
 		this->ResetLevel();
 		this->ResetPlayer();
 	}
+	//update particals
+	partical->Update(dt, *ball, 2, glm::vec2(ball->Radius / 2));
 }
 
 void Game::Render(){
 	if (this->state == GAME_ACTIVE) {
 		renderer->DrawSprite(ResourceManager::GetTexture("background"),
 			glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
-	}
-	this->levels[this->level].Draw(*renderer);
 
-	//Draw Player
-	Player->Draw(*renderer);
+		this->levels[this->level].Draw(*renderer);
+
+		//Draw Player
+		Player->Draw(*renderer);
+
+		partical->Draw();
+
+		//Draw Ball
+		ball->Draw(*renderer);
+	}
 	
-	//Draw Ball
-	ball->Draw(*renderer);
 }
 
 void Game::ResetLevel() {
