@@ -139,6 +139,7 @@
     <ClCompile Include="src\GameLevel.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\tools\ParticalGenerator.cpp" />
+    <ClCompile Include="src\tools\PostProcessor.cpp" />
     <ClCompile Include="src\tools\ResourceManager.cpp" />
     <ClCompile Include="src\tools\Shader.cpp" />
     <ClCompile Include="src\tools\SpriteRenderer.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\tools\GetError.h" />
     <ClInclude Include="src\tools\ParticalGenerator.h" />
+    <ClInclude Include="src\tools\PostProcessor.h" />
     <ClInclude Include="src\tools\ResourceManager.h" />
     <ClInclude Include="src\tools\Shader.h" />
     <ClInclude Include="src\tools\SpriteRenderer.h" />
@@ -463,6 +465,7 @@
     <None Include="res\levels\three.lvl" />
     <None Include="res\levels\two.lvl" />
     <None Include="src\Shaders\partical.shader" />
+    <None Include="src\Shaders\postProcessor.shader" />
     <None Include="src\Shaders\sprite.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />

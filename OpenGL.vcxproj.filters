@@ -72,6 +72,9 @@
     <ClCompile Include="src\tools\ParticalGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\tools\PostProcessor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image.h">
@@ -980,6 +983,9 @@
     <ClInclude Include="src\tools\ParticalGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\tools\PostProcessor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1396,5 +1402,6 @@
     <None Include="res\levels\three.lvl" />
     <None Include="res\levels\four.lvl" />
     <None Include="src\Shaders\partical.shader" />
+    <None Include="src\Shaders\postProcessor.shader" />
   </ItemGroup>
 </Project>

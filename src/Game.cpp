@@ -3,11 +3,15 @@
 #include "ResourceManager.h"
 #include "BallObject.h"
 #include "ParticalGenerator.h"
+#include "PostProcessor.h"
 
 SpriteRenderer* renderer;
 GameObject* Player;
 BallObject* ball;
 ParticleGenerator* partical;
+PostProcessor* Effects;
+
+float ShakeTime = 0.0f;
 
 Game::Game(GLuint width, GLuint height)
 	:state(GAME_ACTIVE),keys(),width(width),height(height) {
@@ -17,6 +21,9 @@ Game::Game(GLuint width, GLuint height)
 Game::~Game(){
 	delete renderer;
 	delete Player;
+	delete ball;
+	delete partical;
+	delete Effects;
 }
 
 void Game::Init(){
@@ -27,6 +34,7 @@ void Game::Init(){
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 	ResourceManager::LoadShader("src/Shaders/partical.shader", "partical");
 	ResourceManager::GetShader("partical").Use().SetMatrix4("projection", projection);
+	ResourceManager::LoadShader("src/Shaders/postProcessor.shader", "postProcessor");
 
 	renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -60,6 +68,8 @@ void Game::Init(){
 		ResourceManager::GetTexture("partical"),
 		500
 	);
+
+	Effects = new PostProcessor(ResourceManager::GetShader("postProcessor"), this->width, this->height);
 }
 
 void Game::ProcessInput(GLfloat dt){
@@ -90,6 +100,12 @@ void Game::Update(GLfloat dt){
 	ball->Move(dt, this->width);
 	// check for collisions
 	this->DoCollisions();
+	if (ShakeTime > 0.0f) {
+		ShakeTime -= dt;
+		if (ShakeTime <= 0.0f) {
+			Effects->Shake = false;
+		}
+	}
 	// check loss condition
 	if (ball->Position.y >= this->height) {
 		this->ResetLevel();
@@ -101,18 +117,26 @@ void Game::Update(GLfloat dt){
 
 void Game::Render(){
 	if (this->state == GAME_ACTIVE) {
-		renderer->DrawSprite(ResourceManager::GetTexture("background"),
-			glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
+		// begin rendering to postprocessing framebuffer
+		Effects->BeginRender();
+			//draw background
+			renderer->DrawSprite(ResourceManager::GetTexture("background"),
+				glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
 
-		this->levels[this->level].Draw(*renderer);
+			this->levels[this->level].Draw(*renderer);
 
-		//Draw Player
-		Player->Draw(*renderer);
+			//Draw Player
+			Player->Draw(*renderer);
 
-		partical->Draw();
+			partical->Draw();
 
-		//Draw Ball
-		ball->Draw(*renderer);
+			//Draw Ball
+			ball->Draw(*renderer);
+
+		// end rendering to postprocessing framebuffer
+		Effects->EndRender();
+		// render postprocessing quad
+		Effects->Render(glfwGetTime());
 	}
 	
 }
@@ -151,6 +175,11 @@ void Game::DoCollisions() {
 				//destory block if not solid
 				if (!box.IsSolid) {
 					box.Destroyed = true;
+				}
+				else {
+					// if block is solid,enable shake effect
+					ShakeTime = .05f;
+					Effects->Shake = true;
 				}
 				//collision resolution
 				Direction dir = std::get<1>(collision);
