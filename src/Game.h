@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "GameLevel.h"
+#include "PowerUp.h"
 
 
 enum GameState {
@@ -40,6 +41,8 @@ public:
 	std::vector<GameLevel> levels;
 	GLuint level;
 
+	std::vector<PowerUp> PowerUps;
+
 	Game(GLuint width, GLuint height);
 	~Game();
 
@@ -53,4 +56,8 @@ public:
 	//reset
 	void ResetLevel();
 	void ResetPlayer();
+
+	// powerups 
+	void SpawnPowerUps(GameObject& block); //在给定的砖块位置生成一个道具
+	void UpdatePowerUps(GLfloat dt);  //管理所有激活的道具
 };

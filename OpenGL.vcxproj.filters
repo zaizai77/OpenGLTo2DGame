@@ -986,6 +986,9 @@
     <ClInclude Include="src\tools\PostProcessor.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\tools\PowerUp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">

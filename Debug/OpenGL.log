@@ -1,12 +1,10 @@
 ﻿  Game.cpp
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(49,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(50,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(51,80): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(52,79): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
-D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(139,30): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  PostProcessor.cpp
-  正在生成代码...
-LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
-LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
-glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc120.pdb”(使用“glew32s.lib(glew.obj)”或在“D:\vs2022\OpenGLTo2DGame\OpenGL\Debug\vc120.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\tools\PowerUp.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(56,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(57,78): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(58,80): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(59,79): warning C4244: “参数”: 从“double”转换到“GLuint”，可能丢失数据
+D:\vs2022\OpenGLTo2DGame\OpenGL\src\Game.cpp(154,30): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
   OpenGL.vcxproj -> D:\vs2022\OpenGLTo2DGame\OpenGL\Debug\OpenGL.exe

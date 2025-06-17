@@ -17,6 +17,9 @@
 #include "ResourceManager.h"
 #include "Game.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H  
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // settings
